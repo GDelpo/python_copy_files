@@ -1,0 +1,3 @@
+# Esta herramienta usa únicamente la biblioteca estándar de Python.
+# No requiere instalar dependencias externas.
+# Requiere Python 3.7 o superior.
