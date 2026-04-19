@@ -1,116 +1,54 @@
-# File Batch Copier
+# copy-files
 
-## Repositorio
+<p>
+  <img alt="Python" src="https://img.shields.io/badge/python-3.7%2B-blue?logo=python&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-green">
+  <img alt="Status" src="https://img.shields.io/badge/status-stable-green">
+</p>
 
-```bash
-git clone http://192.168.190.95/forgejo/noble/copy-files.git
-git pull origin main   # actualizar
-```
+> Herramienta Python para copiar archivos en lote a partir de una lista `.txt`. GUI Tkinter + backend scripteable. **Cero dependencias externas** — solo stdlib.
 
-> Primera vez en una máquina nueva: ver [SETUP.md](http://192.168.190.95/forgejo/noble/workspace/raw/branch/main/SETUP.md) para configurar proxy y credenciales Git.
+## Features
 
----
+- Copia archivos listados en un `.txt` a un destino configurable, respetando (o aplanando) la estructura.
+- GUI Tkinter (`UI.py`) o uso directo del backend desde CLI / como módulo Python.
+- Utilidad de comparación de listas: dada una lista A y una lista B, exporta los elementos faltantes en cada una.
+- Utilidad de prefijo: agrega un path base a cada línea de un archivo de texto.
 
-
-Herramienta Python para **copiar archivos en lote** a partir de una lista en `.txt`. Incluye interfaz gráfica, backend scripteable y utilidades de apoyo.
-
-No requiere dependencias externas — solo biblioteca estándar de Python.
-
----
-
-## Herramientas incluidas
-
-| Archivo | Descripción |
-|---------|-------------|
-| `UI.py` | Interfaz gráfica (tkinter) — punto de entrada principal |
-| `backend.py` | Lógica central, usable desde CLI o como módulo |
-| `diff_txt.py` | Compara dos listas y exporta los elementos faltantes |
-| `agrega_prefijo.py` | Agrega un prefijo de ruta a cada línea de un archivo |
-
----
-
-## Requisitos
+## Requirements
 
 - Python 3.7+
-- Sin dependencias externas (`pip install` no necesario)
+- **Sin dependencias externas** — no hay que correr `pip install`.
 
----
-
-## Uso
-
-### Interfaz gráfica
+## Quickstart
 
 ```bash
+git clone https://github.com/GDelpo/copy-files.git
+cd copy-files
 python UI.py
 ```
 
-1. **Listado (.txt):** seleccioná el `.txt` con las rutas completas de los archivos a copiar (una por línea).
-2. **Destino:** seleccioná la carpeta de destino.
-3. Hacé clic en **PROCESAR LOTE**.
+## Componentes
 
-El progreso se muestra en tiempo real. Si hubo errores, se genera automáticamente un reporte `errores_YYYYMMDD_HHMMSS.txt` en la carpeta destino.
+| Archivo | Descripción |
+|---------|-------------|
+| `UI.py` | Entry point con GUI Tkinter |
+| `backend.py` | Lógica de copia — usable desde CLI o como `import` |
+| `diff_txt.py` | Compara dos `.txt` y exporta los elementos faltantes |
+| `agrega_prefijo.py` | Agrega un prefijo de ruta a cada línea de un `.txt` |
 
----
+## Usage programática
 
-### Backend por línea de comandos
+```python
+from backend import copy_from_list
 
-```bash
-python backend.py <lista.txt> <destino/>
+copy_from_list(
+    list_file="files_to_copy.txt",
+    destination="C:/backup",
+    flatten=False,  # True para ignorar estructura de carpetas
+)
 ```
 
-El `.txt` debe tener una ruta absoluta por línea:
+## License
 
-```
-C:/documentos/informe.pdf
-C:/imagenes/foto.jpg
-/home/usuario/datos/archivo.csv
-```
-
----
-
-### Encontrar archivos faltantes entre dos listas
-
-```bash
-python diff_txt.py --total lista_completa.txt --actual lista_actual.txt --salida faltantes.txt
-```
-
-| Argumento | Descripción |
-|-----------|-------------|
-| `--total` | Lista completa esperada |
-| `--actual` | Lista de lo que existe actualmente |
-| `--salida` | Archivo de salida (default: `faltantes.txt`) |
-
----
-
-### Agregar prefijo de ruta a una lista
-
-Útil para convertir nombres de archivo sueltos en rutas completas antes de pasarlos al copiador.
-
-```bash
-python agrega_prefijo.py --prefijo "\\servidor\carpeta\" --entrada nombres.txt --salida rutas.txt
-python agrega_prefijo.py --prefijo "/mnt/nas/datos/" --entrada nombres.txt --salida rutas.txt
-```
-
-| Argumento | Descripción |
-|-----------|-------------|
-| `--prefijo` | Prefijo a agregar (ruta local, de red, etc.) |
-| `--entrada` | Archivo de entrada (default: `lista.txt`) |
-| `--salida` | Archivo de salida (default: `lista_prefijada.txt`) |
-
----
-
-## Flujo típico de uso
-
-```
-lista_completa.txt  ──►  diff_txt.py  ──►  faltantes.txt
-                                                │
-                                    agrega_prefijo.py  ──►  rutas_completas.txt
-                                                                    │
-                                                           UI.py / backend.py  ──►  destino/
-```
-
----
-
-## Licencia
-
-MIT
+[MIT](LICENSE) © 2026 Guido Delponte
